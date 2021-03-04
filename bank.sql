@@ -132,14 +132,14 @@ CREATE table checking_account (
 insert into branch values ('Rock Ridge Branch', 'Charlotte', 2000000.00);
 insert into branch values ('Downtown Branch', 'Laconia', 2900000.00);
 insert into branch values ('Fairview Branch', 'Yukioville', 6000000.00);
-insert into branch values ('Brooklyn Branch', 'Pinehurst', 4000000.00);
+insert into branch values ('Brooklyn Branch', 'Brooklyn', 4000000.00);
 insert into branch values ('Portland Branch', 'Custer', 1700000.00);
 
 insert into customer values ('569-124-789', 'Kija Sensei', 'Evergreen', 'Charlotte');
 insert into customer values ('532-896-102', 'Maki San', 'Rose Street', 'Laconia');
 insert into customer values ('789-120-569', 'Itadori Yuuji', 'Sukuna Lane','Charlotte' );
 insert into customer values ('200-453-896', 'Rin Okumara', 'Spawn Street', 'Yukioville');
-insert into customer values ('230-965-125', 'Shiemi Morn', 'Roosevelt', 'Pinehurst');
+insert into customer values ('230-965-125', 'Shiemi Morn', 'Roosevelt', 'Brooklyn');
 insert into customer values ('159-630-750', 'Crissy Brown', 'Oak Street', 'Laconia');
 insert into customer values ('285-153-002', 'Nanami Nue', 'Colonial Drive', 'Custer');
 
@@ -225,8 +225,8 @@ insert into savings_account values ('230-965-125', 0.05);
 insert into checking_account values ('789-120-569', 2000.00);
 insert into checking_account values ('159-630-750',10000.00);
 insert into checking_account values ('285-153-002', 500.00);
-*/
 
+*/
 
 /*Question 1*/
 /*
@@ -274,8 +274,40 @@ ALTER table account add column status varchar(10);
 */
 
 /*Question 6*/
+/*
+UPDATE account
+SET status = case
+                    WHEN account.balance <100 THEN 'inactive'
+                    ELSE 'active'
+            END;
+*/
 
+/*Question 7*/
+/*
+SELECT account_branch.branch_name, SUM(balance)  
+FROM account_branch JOIN account 
+ON  account_branch.account_number = account.account_number 
+GROUP BY account_branch.branch_name 
+    HAVING SUM(balance) < (SELECT avg (balance) FROM account);
+*/
 
+/*Question 8*/
+
+/*Question 9*/
+/*
+SELECT branch_name, SUM(assets) FROM branch 
+WHERE branch_city NOT LIKE '%Brooklyn%' 
+GROUP BY branch_city HAVING SUM(assets) > 
+            all(SELECT sum(assets) 
+            FROM branch 
+            WHERE branch_city = "Brooklyn" 
+            GROUP BY branch_city);
+*/
+
+/*Question 10*/
+SELECT b.branch_name, ROUND(avg(a.balance),2) as "Average Balance" from account AS a
+    LEFT JOIN account_branch AS b ON a.account_number = b.account_number 
+    group by a.account_number having avg (balance) > 1500;
 /*
 SELECT DISTINCT b.branch_name, ROUND(avg(a.balance),2) as "Average Balance" from account AS a LEFT JOIN account_branch AS b ON a.account_number = b.account_number group by b.branch_name having avg (balance) > 0;
 #10^
