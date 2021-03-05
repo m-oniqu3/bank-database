@@ -305,10 +305,10 @@ GROUP BY branch_city HAVING SUM(assets) >
 */
 
 /*Question 10*/
-SELECT b.branch_name, ROUND(avg(a.balance),2) as "Average Balance" from account AS a
-    LEFT JOIN account_branch AS b ON a.account_number = b.account_number 
-    group by a.account_number having avg (balance) > 1500;
 /*
-SELECT DISTINCT b.branch_name, ROUND(avg(a.balance),2) as "Average Balance" from account AS a LEFT JOIN account_branch AS b ON a.account_number = b.account_number group by b.branch_name having avg (balance) > 0;
-#10^
+SELECT DISTINCT b.branch_name, avg(a.balance) from account 
+AS a LEFT JOIN account_branch AS b 
+ON b.account_number = a.account_number 
+GROUP BY a.account_number having avg (balance) > 1500;
+
 */
